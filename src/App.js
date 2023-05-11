@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import MoviesList from './components/MoviesList';
 import './App.css';
@@ -10,7 +10,7 @@ function App() {
   const [error, setError] = useState(null)
   const [retryTimer, setRetryTimer]= useState(null)
   const [cancel, setCancelRetry] = useState(false)
-   async function fetchMovies(){
+  const fetchMovies = useCallback( async ()=>{
     setIsLoading(true);
     setError(null)
     try{
@@ -37,7 +37,11 @@ function App() {
         }, 5000))
       }
 
-  };
+  }, [])
+
+  useEffect(()=>{
+    fetchMovies()
+  }, [fetchMovies])
 
   const cancelRetry= () =>{
     clearInterval(retryTimer)
