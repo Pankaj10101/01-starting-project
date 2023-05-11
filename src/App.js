@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import MoviesList from './components/MoviesList';
 import './App.css';
 import Loader from './components/Loader';
+import AddMovieForm from './components/Input/AddMovieForm';
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -39,9 +40,9 @@ function App() {
 
   }, [])
 
-  useEffect(()=>{
-    fetchMovies()
-  }, [fetchMovies])
+  // useEffect(()=>{
+  //   fetchMovies()
+  // }, [fetchMovies])
 
   const cancelRetry= () =>{
     clearInterval(retryTimer)
@@ -50,8 +51,12 @@ function App() {
 
   return (
     <React.Fragment>
+    <section>
+    <AddMovieForm/>
+    </section>
       <section>
         {isLoading && <Loader />}
+
         <button onClick={fetchMovies}>Fetch Movies</button>
       </section>
       <section>
