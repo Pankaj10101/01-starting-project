@@ -8,10 +8,9 @@
     align-items: center;
 }
 .item{
-    display: flex;
+    display: flex-start;
     flex-direction: column;
     width: 100%;
-    align-items: start;
 }
 input{
 width: 100%;

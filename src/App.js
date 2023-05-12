@@ -15,21 +15,24 @@ function App() {
     setIsLoading(true);
     setError(null)
     try{
-    const response = await fetch('https://swapi.dev/api/films/')
+    const response = await fetch('https://react-movies-d4095-default-rtdb.firebaseio.com/movies.json')
     if(!response.ok){
       throw new Error('Something went wrong ....Retrying')
     }
     const data = await response.json()
-    const fetchedData = data.results.map((item) => {
-          return {
-            id: item.episode_id,
-            title: item.title,
-            releaseDate: item.release_date,
-            openingText: item.opening_crawl,
-          };
-        });
+    const loadedMovies = [];
+
+    for(const key in data) {
+      loadedMovies.push({
+        id : key,
+        title : data[key].title,
+        releaseDate : data[key].releaseDate,
+        openingText : data[key].openingText,
+      })
+    }
+
    setIsLoading(false);
-  setMovies(fetchedData);
+  setMovies(loadedMovies);
       }catch(error){
         setError(error.message)
         setIsLoading(false);
@@ -44,15 +47,38 @@ function App() {
   //   fetchMovies()
   // }, [fetchMovies])
 
+   const addMovieHandler = async (movie)=>{
+    await  fetch('https://react-movies-d4095-default-rtdb.firebaseio.com/movies.json', {
+      method :'POST',
+      body : JSON.stringify(movie),
+      headers : {
+        'Content-Type' : 'application/json'
+      }
+    })
+
+
+  }
+
   const cancelRetry= () =>{
     clearInterval(retryTimer)
     setCancelRetry(true)
   }
 
+
+  const deleteMovie = async (id)=>{
+    await fetch(`https://react-movies-d4095-default-rtdb.firebaseio.com/movies.json/${id}`, {
+      method :'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+    }
+    })
+    fetchMovies()
+  }
+
   return (
-    <React.Fragment>
+    <>
     <section>
-    <AddMovieForm/>
+    <AddMovieForm addMovieHandler= {addMovieHandler}/>
     </section>
       <section>
         {isLoading && <Loader />}
@@ -60,7 +86,7 @@ function App() {
         <button onClick={fetchMovies}>Fetch Movies</button>
       </section>
       <section>
-        <MoviesList movies={movies} />
+        <MoviesList movies={movies} deleteMovie = {deleteMovie} />
         {!isLoading && error && !cancel && (
           <>
             <p>{error}</p>
@@ -74,7 +100,7 @@ function App() {
           </>
         )}
       </section>
-    </React.Fragment>
+    </>
   );
 }
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./AddMovieForm.css";
-const AddMovieForm = () => {
+const AddMovieForm = (props) => {
   const [data, setData] = useState({});
   const handleChange = (name, value) => {
     setData((prev)=>({...prev, [name]:value}))
@@ -8,7 +8,7 @@ const AddMovieForm = () => {
 
 const submitForm = (e)=>{
     e.preventDefault()
-    console.log(data)
+    props.addMovieHandler(data)
 }
 
   return (
