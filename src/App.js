@@ -64,16 +64,16 @@ function App() {
     setCancelRetry(true)
   }
 
-
-  const deleteMovie = async (id)=>{
-    await fetch(`https://react-movies-d4095-default-rtdb.firebaseio.com/movies.json/${id}`, {
-      method :'DELETE',
+  const deleteMovie = async (id) => {
+    await fetch(`https://react-movies-d4095-default-rtdb.firebaseio.com/movies/${id}.json`, {
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
-    }
-    })
-    fetchMovies()
-  }
+      },
+    });
+    await fetchMovies();
+  };
+  
 
   return (
     <>
